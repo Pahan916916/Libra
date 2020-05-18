@@ -5,3 +5,4 @@ qrcode[pil]
 django-qr-code
 datetime
 mammoth
+jinja2
