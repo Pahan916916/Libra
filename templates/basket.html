@@ -1,0 +1,162 @@
+{% extends "pattern.html" %}
+
+  {% block content %}
+    {{ error }}
+
+    {% if orders_array %}
+
+    <div class="container">
+      <h1 class="text-center">Ваши заказы</h1>
+  
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Фото</th>
+            <th scope="col">Название</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Стоимость</th>
+            <th scope="col">Удалить</th>
+          </tr>
+        </thead>
+        <tbody>
+  
+          {% for order in orders_array %}
+          
+          <tr id="row{{ order.id }}">
+            <td><img class="img-responsive" src="{{ order.feed.img.url }}" alt="img" height="100px" style="border-radius: 4px;"></td>
+            <td>{{ order.feed }}</td>
+            <td>
+              <button class="btn" onclick="update_basket({{ order.id }}, '-');">-</button>
+              <a id="count{{ order.id }}">{{ order.count }}</a>
+              <button class="btn" onclick="update_basket({{ order.id }}, '+');">+</button>
+            </td>
+            
+            <td id="cost{{ order.id }}">{{ order.cost|floatformat:2 }} руб.</td>
+            <td><a class="btn btn-primary text-light" onclick="del_from_basket({{ order.id }});">Удалить</a></td>
+          </tr>
+          
+            {% endfor %}
+            
+          </tbody>
+        </table>
+        <div class="text-center">
+          <a class="btn btn-primary text-light" href="/basket/" onclick="confirm_all();">Подтвердить</a>
+        </div>
+
+
+      
+      {% else %}
+
+      {% if confirmed_orders_array %}
+      
+      {% else %}
+      <h1 class="text-center">Ваша корзина пуста</h1>
+      
+      {% endif %}
+
+      {% endif %}
+    </div>
+    
+    
+    {% if confirmed_orders_array %}
+
+    <div class="container">
+      <h1 class="text-center">Подтвержденные заказы</h1>
+  
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Фото</th>
+            <th scope="col">Название</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Стоимость</th>
+          </tr>
+        </thead>
+        <tbody>
+  
+          {% for order in confirmed_orders_array %}
+          
+          <tr id="row{{ order.id }}">
+            <td><img class="img-responsive" src="{{ order.feed.img.url }}" alt="img" height="100px" style="border-radius: 4px;"></td>
+            <td>{{ order.feed }}</td>
+            <td>
+              <a id="count{{ order.id }}">{{ order.count }}</a>
+            </td>
+            <td id="cost{{ order.id }}">{{ order.cost|floatformat:2 }} руб.</td>
+          </tr>
+          
+            {% endfor %}
+  
+        </tbody>
+      </table>
+  
+      {% load qr_code %}
+      <div class="container text-center">
+        <h1>Покажите этот QR код продавцу</h1>
+          {% qr_from_text check_user size=25 border=0 %}
+      </div>
+    </div>
+    
+
+    {% endif %}
+    
+    
+    
+    
+    <script>
+      var csrf = '{{ csrf_token }}'
+
+      function confirm_all() {
+        $.post("/api/confirm_all/",
+        {
+          'csrfmiddlewaretoken': csrf,
+        },
+        function(data,status){
+          // alert(data['error'] + data['orders_count']);
+        });
+      }
+
+      function del_from_basket(id) {
+        $.post("/api/del_order/",
+        {
+          'id': id,
+          'csrfmiddlewaretoken': csrf,
+        },
+        function(data,status){ 
+          $('#row' + id).hide();
+          // alert(data['error'] + data['orders_count']);
+        });
+      }
+
+      function update_basket(id, operator) {
+        var count = parseInt($( "#count" + id ).text());
+        var count_text = $( "#count" + id ).text();
+        if ( operator == '+' ) {
+          count = count + 1
+        } if ( operator == '-' ) {
+          if ( parseInt(count) > 1 ) {
+            count = count - 1
+          }
+        } else {
+          // alert('Что-то не так');
+        }
+        $.post("/api/update_order/",
+        {
+          'id': id,
+          'count': count,
+          'csrfmiddlewaretoken': csrf,
+        },
+        function(data,status){
+          if ( status == 'success' ) {
+            var cost = count * parseFloat($( "#cost" + id ).text()) / parseInt($( "#count" + id ).text());
+            $( "#count" + id ).text(count);
+            $( "#cost" + id ).text(parseFloat(cost).toFixed(2)+" руб.");
+          }
+        });
+      }
+    </script>
+
+
+         
+
+  {% endblock %}

@@ -1,0 +1,59 @@
+{% extends "pattern.html" %}
+
+  {% block content %}
+    {{ error }}   
+
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="container">
+            
+            {% include 'left_column_pattern.html' %}
+
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="container">
+
+            <h4>Список жанров</h4>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Название</th>
+                  <th>Описание</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for i in categoryarray %}
+  
+                  <tr>
+                    <th>
+                      <a href="/category/{{ i.id }}/">{{ i.name }}</a>
+                    </th>
+                    <th>
+                      {{ i.description }}
+                    </th>
+                  </tr>
+                                      
+                {% endfor %}
+
+              </tbody>
+
+            </table>
+
+          </div>
+        </div>
+    </div>
+
+    </div>
+
+    
+
+
+  {% endblock %}
+
+  

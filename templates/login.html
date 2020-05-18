@@ -1,0 +1,39 @@
+{% extends "pattern.html" %}
+
+  {% block content %}
+
+    <h1 class="text-center">Вход</h1>
+    <div class="container mx-auto" style="width: 200px;"> 
+      <form method="POST" class="form-group">
+
+          {% csrf_token %}
+
+          {% for field in form %}
+
+          <div class="row">
+             <div class="col">    
+
+              {{ field.label_tag }}
+
+              {% if field.help_text %}
+
+                <sup>{{ field.help_text }}</sup>
+
+              {% endif %}
+
+              {{ field.errors }}
+
+             </div><div class="col" style="margin-bottom: 10px;">
+
+               {{ field }}
+
+             </div>
+          </div>
+          
+          {% endfor %}
+
+          <button type="submit" class="btn btn-light">Отправить</button>
+      </form>
+     </div>
+  
+  {% endblock %}

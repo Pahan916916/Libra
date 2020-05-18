@@ -1,0 +1,79 @@
+{% extends "pattern.html" %}
+
+  {% block content %}
+    {{ error }}
+
+    <div class="container">
+      
+      <div class="row">
+          <div class="col-sm-4">
+            <div class="container">
+              {% include 'left_column_pattern.html' %}
+
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="container">
+              <h1>{{ name }}</h1>
+              <p><strong>Имя: </strong>{{ name }}</p>
+              <p><strong>Описание:<br></strong>{{ description }}</p>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Жанр</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for i in bookarray %}
+    
+                    <tr>
+                      <th>
+                        <a href="/book/{{ i.id }}/">{{ i.name }}</a>
+                      </th>
+                      <th>
+                        {{ i.description }}
+                      </th>
+                      <th>
+                        {{ i.category }}
+                      </th>
+                    </tr>
+                                        
+                  {% endfor %}
+
+                </tbody>
+
+              </table>
+
+            </div>
+          </div>
+      </div>
+                                              
+    </div>
+
+    <script>
+      // var book_id = parseInt('{{ book_id }}')
+      // var csrf = '{{ csrf_token }}';
+      // var book_description;
+      
+      // $( document ).ready(function() {
+      //   $.post("/api/get_book_description/",
+      //   {
+      //     'csrfmiddlewaretoken': csrf,
+      //     'id': book_id
+      //   },
+      //   function(data,status){
+
+      //   });
+      // });
+
+    </script>
+
+
+
+  {% endblock %}
+
+  

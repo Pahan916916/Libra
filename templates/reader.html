@@ -1,0 +1,100 @@
+{% extends "pattern.html" %}
+
+  {% block content %}
+    {{ error }}
+
+    <div class="container">
+
+        <!-- <iframe src="https://research.google.com/pubs/archive/44678.pdf" width="100%" height="800px"> -->
+
+          <div class="container text-center">
+            <button class="btn" onclick="change_page('-');"><</button>
+            <select id="page_selector1"></select>
+            <button class="btn" onclick="change_page('+');">></button>
+          </div>
+
+          <p>
+            <p class="converted_docx">
+            </p>
+          </p>
+
+          <div class="container text-center">
+            <button class="btn" onclick="change_page('-');"><</button>
+            <select id="page_selector2"></select>
+            <button class="btn" onclick="change_page('+');">></button>
+          </div>
+                            
+    </div>
+
+    <script>
+      var book_id = parseInt('{{ book_id }}')
+      var csrf = '{{ csrf_token }}';
+      var converted_from_docx;
+      var converted_docx_list;
+      var page_number = parseInt(0);
+      $( document ).ready(function() {
+        $.post("/api/get_text_from_book/",
+        {
+          'csrfmiddlewaretoken': csrf,
+          'id': book_id
+        },
+        function(data,status){
+          converted_from_docx = data['converted_docx'];
+          converted_docx_list = data['converted_docx_list'];
+
+          var i;
+          for (i = 0; i < converted_docx_list.length; i++) {
+            $('#page_selector1')
+              .append($("<option></option>")
+                          .attr("value",i)
+                          .text(i+1));
+            $('#page_selector2')
+              .append($("<option></option>")
+                          .attr("value",i)
+                          .text(i+1));  
+          }
+
+          $(".converted_docx").html('<p class="converted_docx">'+converted_docx_list[page_number]+'</p>');
+        });
+      });
+
+      $('#page_selector1').on('change', function() {
+        set_page( parseInt(this.value) );
+      });
+      $('#page_selector2').on('change', function() {
+        set_page( parseInt(this.value) );
+      });
+
+      
+
+      function change_page(operator) {
+        if ( operator == '+' ) {
+          if ( converted_docx_list[page_number + 1] ) {
+            page_number += 1;
+            set_page(page_number);
+          }
+        } else if ( operator == '-' ) {
+          if ( converted_docx_list[page_number - 1] ) {
+            page_number -= 1;
+            set_page(page_number);
+          }
+        }
+      }
+
+      function set_page(number) {
+        if ( converted_docx_list[number] ) {
+            page_number = number;
+            $(".converted_docx").html('<p class="converted_docx"></p>');
+            $(".converted_docx").html('<p class="converted_docx">'+converted_docx_list[page_number]+'</p>');
+            $("#page_selector1").val(page_number)
+            $("#page_selector2").val(page_number)
+            $(window).scrollTop(0); 
+          }
+      }
+    </script>
+
+
+
+  {% endblock %}
+
+  

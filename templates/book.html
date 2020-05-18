@@ -1,0 +1,53 @@
+{% extends "pattern.html" %}
+
+  {% block content %}
+    {{ error }}
+
+    <div class="container">
+      
+      <div class="row">
+          <div class="col-sm-4">
+            <div class="container">
+              {% include 'left_column_pattern.html' %}
+
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="container">
+              <h4>{{ author }} - {{ name }}</h4>
+              <p><strong>Автор: </strong><a href="/author/{{ author.id }}/">{{ author }}</a></p>
+              <p><strong>Название: </strong>{{ name }}</p>
+              <p><strong>Дата добавления: </strong>{{ release_date }}</p>
+              <img src={{ cover.url }} class="rounded" width="250px">
+              <p><strong>Описание:<br> </strong>{{ description }}</p>
+              <p><a href="read">Читать книгу онлайн</a></p>
+              <p><a href="{{ file.url }}" download>Скачать книгу в формате .docx</a></p>
+            </div>
+          </div>
+      </div>
+                                              
+    </div>
+
+    <script>
+      // var book_id = parseInt('{{ book_id }}')
+      // var csrf = '{{ csrf_token }}';
+      // var book_description;
+      
+      // $( document ).ready(function() {
+      //   $.post("/api/get_book_description/",
+      //   {
+      //     'csrfmiddlewaretoken': csrf,
+      //     'id': book_id
+      //   },
+      //   function(data,status){
+
+      //   });
+      // });
+
+    </script>
+
+
+
+  {% endblock %}
+
+  

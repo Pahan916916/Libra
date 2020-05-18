@@ -1,0 +1,44 @@
+{% extends "pattern.html" %}
+
+  {% block content %}
+    {{ error }}   
+
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="container">
+            
+            {% include 'left_column_pattern.html' %}
+
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="container">
+
+            <p>
+              Приветствуем Вас на сайте электронной информационно-библиотечной системы Libra.
+            </p>
+            <p>
+              На нашем сайте предаставлены книги для бесплатного скачивания в формате .docx.
+            </p>
+            <p>
+              Для удобства пользования веб-приложением, имеется функция онлайн чтения книги прямо на сайте.
+            </p>
+            <p>
+              Для навигации по сайту воспользуйтесь коллонкой слева.
+            </p>
+
+          </div>
+        </div>
+    </div>
+
+    </div>
+
+    
+
+
+  {% endblock %}
+
+  
